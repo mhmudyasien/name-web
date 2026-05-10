@@ -114,20 +114,12 @@ body {
     gap: 20px;
 }
 
-.main-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #ffffff;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(138, 43, 226, 0.6);
-    margin-bottom: 5px;
-    letter-spacing: 2px;
-}
-
 .prompt-text {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 400;
     color: #b0b0d0;
     margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(180, 180, 255, 0.3);
 }
 
 /* Input Styles */
@@ -305,10 +297,12 @@ input:focus {
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+    max-width: 90%;
 }
 
-.success-line1, .success-line2 {
+.success-message {
     font-size: 1.5rem;
+    line-height: 1.5;
     color: #ffffff;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 102, 179, 0.6);
     opacity: 0;
@@ -316,20 +310,13 @@ input:focus {
     transition: all 1s ease;
 }
 
-.terminal-popup.active .success-line1 {
+.terminal-popup.active .success-message {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0.5s;
 }
 
-.terminal-popup.active .success-line2 {
-    opacity: 1;
-    transform: translateY(0);
-    transition-delay: 2s;
-}
-
 /* Responsive */
-@media (max-width: 480px) {
-    .main-title { font-size: 2rem; }
-    .success-line1, .success-line2 { font-size: 1.2rem; }
+@media (max-width: 768px) {
+    .success-message { font-size: 1.2rem; }
 }
