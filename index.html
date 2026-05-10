@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Verification</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for elegant typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="space-background">
+        <div class="stars layer1"></div>
+        <div class="stars layer2"></div>
+        <div class="stars layer3"></div>
+        
+        <div class="shooting-star" style="top: 10%; left: 80%; animation-delay: 0s;"></div>
+        <div class="shooting-star" style="top: 30%; left: 90%; animation-delay: 2s;"></div>
+        <div class="shooting-star" style="top: 5%; left: 50%; animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="container">
+        <div class="glass-card" id="loginCard">
+            <h1>Identity Verification</h1>
+            <p class="subtitle">Please enter your name to proceed</p>
+            
+            <div class="input-group">
+                <input type="text" id="nameInput" placeholder="Enter Your Name" autocomplete="off">
+            </div>
+            
+            <p class="error-message" id="errorMessage"></p>
+            
+            <button id="submitBtn" class="neon-button">Submit</button>
+        </div>
+    </main>
+
+    <!-- Success Popup -->
+    <div class="popup-overlay" id="successPopup">
+        <div class="popup-content">
+            <div class="glow-orb"></div>
+            <h2>I love you Habiba :)</h2>
+            <p>And I will marry you InshaAllah :')</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
