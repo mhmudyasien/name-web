@@ -4,16 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submitBtn');
     const errorMessage = document.getElementById('errorMessage');
     const successPopup = document.getElementById('successPopup');
+    const heartsContainer = document.getElementById('heartsContainer');
+    const alienContainer = document.getElementById('alienContainer');
 
     const wrongMessages = [
-        "wrong galaxy bro :/",
-        "nah u not her :')",
-        "access denied.",
-        "identity not recognized.",
-        "404: habiba not found."
+        "nah lil bro u not habiba :/",
+        "wrong galaxy my guy :')",
+        "ain't no way u her 💀",
+        "access denied lil bro 🚫",
+        "who is u??? 🤨"
     ];
 
-    // Function to play a soft futuristic hum
+    // Function to play a soft romantic futuristic synth chord
     function playSuccessSound() {
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -23,28 +25,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const masterGain = audioCtx.createGain();
             masterGain.connect(audioCtx.destination);
             
-            // Soft envelope
             masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-            masterGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 1);
-            masterGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 4);
+            masterGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 1.5);
+            masterGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 6);
 
-            // Ethereal chord
-            const frequencies = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+            // Romantic lush chord (Maj7)
+            const frequencies = [261.63, 329.63, 392.00, 493.88]; // C4, E4, G4, B4
             
             frequencies.forEach((freq, index) => {
                 const osc = audioCtx.createOscillator();
-                // Mix of sine and triangle for a soft electronic feel
-                osc.type = index % 2 === 0 ? 'sine' : 'triangle'; 
+                osc.type = 'sine'; 
+                
+                // Add slight detune for a futuristic lush feel
+                osc.detune.value = index * 5; 
                 osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
                 
                 const oscGain = audioCtx.createGain();
-                oscGain.gain.value = 0.5;
+                oscGain.gain.value = 0.4;
                 
                 osc.connect(oscGain);
                 oscGain.connect(masterGain);
                 
                 osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 5);
+                osc.stop(audioCtx.currentTime + 7);
             });
             
         } catch (e) {
@@ -52,11 +55,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function createHearts() {
+        const numHearts = 30;
+        for (let i = 0; i < numHearts; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Random properties
+                const left = Math.random() * 100;
+                const duration = 3 + Math.random() * 4;
+                const scale = 0.5 + Math.random() * 1;
+                
+                heart.style.left = `${left}vw`;
+                heart.style.animationDuration = `${duration}s`;
+                heart.style.transform = `scale(${scale})`;
+                
+                // Alternate colors for a neon futuristic vibe
+                const colors = ['#ff66b3', '#b366ff', '#ff4d4d'];
+                heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                heartsContainer.appendChild(heart);
+                
+                // Cleanup
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+            }, i * 150); // Stagger creation
+        }
+    }
+
+    function spawnAlien() {
+        // Clear previous alien if exists
+        alienContainer.innerHTML = '';
+        
+        const alienWrapper = document.createElement('div');
+        alienWrapper.classList.add('alien-wrapper');
+        
+        // Simple SVG Alien
+        alienWrapper.innerHTML = `
+            <svg class="alien-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Head -->
+                <ellipse cx="50" cy="50" rx="40" ry="30" />
+                <path d="M 10 50 Q 50 90 90 50 Z" />
+                <!-- Eyes -->
+                <g class="alien-eye" transform="translate(30, 45)">
+                    <ellipse cx="0" cy="0" rx="8" ry="12" transform="rotate(-20)" />
+                </g>
+                <g class="alien-eye" transform="translate(70, 45)">
+                    <ellipse cx="0" cy="0" rx="8" ry="12" transform="rotate(20)" />
+                </g>
+                <!-- Mouth -->
+                <path d="M 45 70 Q 50 72 55 70" stroke="#000" stroke-width="2" fill="none" />
+            </svg>
+        `;
+        
+        // Randomize alien position horizontally slightly
+        const offset = (Math.random() - 0.5) * 40;
+        alienWrapper.style.transform = `translateX(calc(-50% + ${offset}px))`;
+        
+        alienContainer.appendChild(alienWrapper);
+        
+        // Cleanup after animation
+        setTimeout(() => {
+            if(alienWrapper.parentNode) {
+                alienWrapper.remove();
+            }
+        }, 5000);
+    }
+
     function handleSubmission() {
         const name = nameInput.value.trim().toLowerCase();
         
         if (name === '') {
-            showError("awaiting input...");
+            showError("enter a name first");
             return;
         }
 
@@ -69,21 +141,26 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 successPopup.classList.add('active');
                 playSuccessSound();
-            }, 1000); // Wait for main content to fade out
+                createHearts();
+            }, 800); // Wait for main content to fade out
             
         } else {
             // Failure
             const randomMsg = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
             showError(randomMsg);
             
-            // Glitch effect on input text momentarily
-            nameInput.style.color = '#ff4d4d';
-            nameInput.style.textShadow = '0 0 10px rgba(255, 77, 77, 0.8)';
+            spawnAlien();
+            
+            // Input shake effect
+            nameInput.classList.remove('shake');
+            void nameInput.offsetWidth; // trigger reflow
+            nameInput.classList.add('shake');
+            
+            nameInput.style.borderBottomColor = '#ff4d4d';
             
             setTimeout(() => {
-                nameInput.style.color = '#ffffff';
-                nameInput.style.textShadow = '0 0 5px rgba(255, 255, 255, 0.3)';
-            }, 400);
+                nameInput.style.borderBottomColor = 'rgba(138, 43, 226, 0.4)';
+            }, 800);
         }
     }
 
@@ -105,8 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     nameInput.addEventListener('input', () => {
         if (errorMessage.classList.contains('visible')) {
             errorMessage.classList.remove('visible');
-            nameInput.style.color = '#ffffff';
-            nameInput.style.textShadow = '0 0 5px rgba(255, 255, 255, 0.3)';
+            nameInput.style.borderBottomColor = 'rgba(138, 43, 226, 0.4)';
         }
     });
 });

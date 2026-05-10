@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Space Mono', monospace;
-    background-color: #000000; /* Pure black */
+    background-color: #000000;
     color: #ffffff;
     height: 100vh;
     overflow: hidden;
@@ -36,7 +36,7 @@ body {
     background: transparent;
 }
 
-/* Pure CSS Stars - reduced opacity for subtlety */
+/* Pure CSS Stars */
 .layer1 {
     width: 1px;
     height: 1px;
@@ -44,7 +44,7 @@ body {
                 50vw 15vh #fff, 60vw 60vh #fff, 70vw 30vh #fff, 80vw 90vh #fff, 
                 90vw 40vh #fff, 100vw 70vh #fff, 5vw 85vh #fff, 15vw 25vh #fff;
     animation: animateStars 100s linear infinite;
-    opacity: 0.3;
+    opacity: 0.4;
 }
 
 .layer2 {
@@ -53,7 +53,7 @@ body {
     box-shadow: 12vw 30vh #e0e0ff, 28vw 70vh #e0e0ff, 42vw 10vh #e0e0ff, 
                 68vw 80vh #e0e0ff, 88vw 20vh #e0e0ff, 8vw 60vh #e0e0ff;
     animation: animateStars 150s linear infinite;
-    opacity: 0.2;
+    opacity: 0.3;
 }
 
 .layer3 {
@@ -62,7 +62,7 @@ body {
     box-shadow: 15vw 15vh #a0a0ff, 35vw 35vh #a0a0ff, 55vw 55vh #a0a0ff, 75vw 75vh #a0a0ff, 
                 95vw 95vh #a0a0ff, 25vw 85vh #a0a0ff, 45vw 25vh #a0a0ff;
     animation: animateStars 80s linear infinite;
-    opacity: 0.1;
+    opacity: 0.2;
 }
 
 @keyframes animateStars {
@@ -72,27 +72,19 @@ body {
 
 .shooting-star {
     position: absolute;
-    width: 100px;
+    width: 150px;
     height: 1px;
-    background: linear-gradient(90deg, rgba(180,180,255,0.5), rgba(0,0,0,0));
+    background: linear-gradient(90deg, rgba(180,180,255,0.8), rgba(0,0,0,0));
     border-radius: 50%;
     transform: rotate(-45deg);
-    animation: shooting 8s linear infinite;
+    animation: shooting 10s linear infinite;
     opacity: 0;
 }
 
 @keyframes shooting {
-    0% {
-        transform: translateX(0) translateY(0) rotate(-45deg);
-        opacity: 1;
-    }
-    5% {
-        opacity: 0;
-    }
-    100% {
-        transform: translateX(-300px) translateY(300px) rotate(-45deg);
-        opacity: 0;
-    }
+    0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
+    5% { opacity: 0; }
+    100% { transform: translateX(-400px) translateY(400px) rotate(-45deg); opacity: 0; }
 }
 
 /* Initial Fade In */
@@ -115,69 +107,55 @@ body {
     transition: opacity 0.8s ease;
 }
 
-.terminal-interface {
+.ui-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(138, 43, 226, 0.6);
+    margin-bottom: 5px;
+    letter-spacing: 2px;
 }
 
 .prompt-text {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 400;
-    color: #e0e0ff;
-    text-transform: lowercase;
-    text-shadow: 0 0 10px rgba(180, 180, 255, 0.3);
-    margin: 0;
-}
-
-.blinking-cursor {
-    animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+    color: #b0b0d0;
+    margin-bottom: 20px;
 }
 
 /* Input Styles */
 .input-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
-    max-width: 300px;
+    max-width: 250px;
     position: relative;
-}
-
-.prompt-symbol {
-    color: #8a2be2;
-    margin-right: 15px;
-    font-size: 1.2rem;
-    text-shadow: 0 0 8px rgba(138, 43, 226, 0.5);
+    margin-bottom: 10px;
 }
 
 input {
     width: 100%;
     background: transparent;
     border: none;
+    border-bottom: 1px solid rgba(138, 43, 226, 0.4);
     color: #ffffff;
     font-size: 1.2rem;
     font-family: 'Space Mono', monospace;
     outline: none;
-    text-align: left;
+    text-align: center;
+    padding: 10px 0;
     caret-color: #8a2be2;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
 }
 
-/* Remove default autofill background in webkit */
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    -webkit-box-shadow: 0 0 0 30px black inset !important;
-    -webkit-text-fill-color: white !important;
-    transition: background-color 5000s ease-in-out 0s;
+input:focus {
+    border-bottom: 1px solid rgba(138, 43, 226, 1);
+    box-shadow: 0 5px 10px -5px rgba(138, 43, 226, 0.5);
 }
 
 /* Error Message */
@@ -188,31 +166,116 @@ input:-webkit-autofill:active{
     opacity: 0;
     transition: opacity 0.3s ease;
     text-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+    margin-bottom: 10px;
 }
 
 .error-message.visible {
     opacity: 1;
 }
 
+/* Shake Animation for Input */
+.shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
 /* Text Button */
 .text-button {
     background: transparent;
-    color: #8a2be2; /* Neon purple */
+    color: #8a2be2;
     border: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-family: 'Space Mono', monospace;
     cursor: pointer;
     text-transform: lowercase;
     transition: all 0.3s ease;
-    padding: 10px;
-    opacity: 0.7;
+    padding: 10px 20px;
+    opacity: 0.8;
 }
 
 .text-button:hover {
     color: #e0b0ff;
     opacity: 1;
     text-shadow: 0 0 15px rgba(224, 176, 255, 0.8), 0 0 5px rgba(138, 43, 226, 0.8);
-    transform: scale(1.05);
+    transform: translateY(-2px);
+}
+
+/* Effects Containers */
+.effects-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+}
+
+/* Floating Space Hearts */
+.heart {
+    position: absolute;
+    bottom: -50px;
+    width: 20px;
+    height: 20px;
+    background-color: #ff66b3;
+    clip-path: path('M10,6 Q10,0 15,0 T20,6 Q20,12 10,20 Q0,12 0,6 T5,0 T10,6 Z');
+    opacity: 0;
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    10% { opacity: 0.8; }
+    50% { transform: translateY(-50vh) scale(1) translateX(20px); }
+    100% { transform: translateY(-100vh) scale(0.5) translateX(-20px); opacity: 0; }
+}
+
+/* Alien Animation */
+.alien-wrapper {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    animation: alienFloat 3s ease-in-out infinite, fadeInOut 5s forwards;
+    opacity: 0;
+}
+
+.alien-svg {
+    width: 100%;
+    height: 100%;
+    fill: #4dff4d;
+    filter: drop-shadow(0 0 10px rgba(77, 255, 77, 0.6));
+}
+
+.alien-eye {
+    fill: #000000;
+    animation: alienBlink 4s infinite;
+}
+
+@keyframes alienFloat {
+    0%, 100% { transform: translate(-50%, 0px); }
+    50% { transform: translate(-50%, -20px); }
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, 50px); }
+    10% { opacity: 1; transform: translate(-50%, 0); }
+    80% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -50px); }
+}
+
+@keyframes alienBlink {
+    0%, 96%, 98% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
 }
 
 /* Success Popup */
@@ -241,14 +304,15 @@ input:-webkit-autofill:active{
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 20px;
 }
 
 .success-line1, .success-line2 {
     font-size: 1.5rem;
     color: #ffffff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(138, 43, 226, 0.3);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 102, 179, 0.6);
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
     transition: all 1s ease;
 }
 
@@ -266,13 +330,6 @@ input:-webkit-autofill:active{
 
 /* Responsive */
 @media (max-width: 480px) {
-    .prompt-text {
-        font-size: 1rem;
-    }
-    input {
-        font-size: 1rem;
-    }
-    .success-line1, .success-line2 {
-        font-size: 1.2rem;
-    }
+    .main-title { font-size: 2rem; }
+    .success-line1, .success-line2 { font-size: 1.2rem; }
 }
