@@ -1,53 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const loginCard = document.getElementById('loginCard');
+    const mainContent = document.getElementById('mainContent');
     const nameInput = document.getElementById('nameInput');
     const submitBtn = document.getElementById('submitBtn');
     const errorMessage = document.getElementById('errorMessage');
     const successPopup = document.getElementById('successPopup');
 
     const wrongMessages = [
-        "Nah bro... wrong universe :/",
-        "Access denied lil bro :')",
-        "Who even are you? 🤨",
-        "Error 404: Name not found in this galaxy.",
-        "Imposter detected! 🚨"
+        "wrong galaxy bro :/",
+        "nah u not her :')",
+        "access denied.",
+        "identity not recognized.",
+        "404: habiba not found."
     ];
 
-    // Function to play a sweet chime sound using pure Web Audio API
+    // Function to play a soft futuristic hum
     function playSuccessSound() {
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             if (!AudioContext) return;
             
             const audioCtx = new AudioContext();
-            
-            // Create a custom gain node to control overall volume and fade out
             const masterGain = audioCtx.createGain();
             masterGain.connect(audioCtx.destination);
             
-            // Envelope
+            // Soft envelope
             masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-            masterGain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
-            masterGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2.5);
+            masterGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 1);
+            masterGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 4);
 
-            // Create sweet chords (C major arpeggio)
-            const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            // Ethereal chord
+            const frequencies = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
             
             frequencies.forEach((freq, index) => {
                 const osc = audioCtx.createOscillator();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (index * 0.15));
+                // Mix of sine and triangle for a soft electronic feel
+                osc.type = index % 2 === 0 ? 'sine' : 'triangle'; 
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
                 
                 const oscGain = audioCtx.createGain();
-                oscGain.gain.setValueAtTime(0, audioCtx.currentTime);
-                oscGain.gain.setValueAtTime(1, audioCtx.currentTime + (index * 0.15));
-                oscGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (index * 0.15) + 2);
+                oscGain.gain.value = 0.5;
                 
                 osc.connect(oscGain);
                 oscGain.connect(masterGain);
                 
-                osc.start(audioCtx.currentTime + (index * 0.15));
-                osc.stop(audioCtx.currentTime + (index * 0.15) + 2.5);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 5);
             });
             
         } catch (e) {
@@ -59,36 +56,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = nameInput.value.trim().toLowerCase();
         
         if (name === '') {
-            showError("Please enter a name first.");
+            showError("awaiting input...");
             return;
         }
 
         if (name === 'habiba') {
             // Success
             errorMessage.classList.remove('visible');
-            loginCard.style.opacity = '0';
-            loginCard.style.pointerEvents = 'none';
+            mainContent.style.opacity = '0';
+            mainContent.style.pointerEvents = 'none';
             
             setTimeout(() => {
                 successPopup.classList.add('active');
                 playSuccessSound();
-            }, 300); // Wait for card to fade out
+            }, 1000); // Wait for main content to fade out
             
         } else {
             // Failure
             const randomMsg = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
             showError(randomMsg);
             
-            // Trigger shake animation
-            loginCard.classList.remove('shake');
-            void loginCard.offsetWidth; // Trigger reflow to restart animation
-            loginCard.classList.add('shake');
+            // Glitch effect on input text momentarily
+            nameInput.style.color = '#ff4d4d';
+            nameInput.style.textShadow = '0 0 10px rgba(255, 77, 77, 0.8)';
             
-            // Red border on input momentarily
-            nameInput.style.borderBottomColor = '#ff4d4d';
             setTimeout(() => {
-                nameInput.style.borderBottomColor = 'rgba(255, 255, 255, 0.2)';
-            }, 1000);
+                nameInput.style.color = '#ffffff';
+                nameInput.style.textShadow = '0 0 5px rgba(255, 255, 255, 0.3)';
+            }, 400);
         }
     }
 
@@ -110,8 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
     nameInput.addEventListener('input', () => {
         if (errorMessage.classList.contains('visible')) {
             errorMessage.classList.remove('visible');
-            loginCard.classList.remove('shake');
-            nameInput.style.borderBottomColor = 'rgba(255, 255, 255, 0.2)';
+            nameInput.style.color = '#ffffff';
+            nameInput.style.textShadow = '0 0 5px rgba(255, 255, 255, 0.3)';
         }
     });
 });

@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Identity Verification</title>
+    <title>Terminal Access</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts for elegant typography -->
+    <!-- Google Fonts for futuristic, electronic typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Background Elements -->
@@ -18,32 +18,31 @@
         <div class="stars layer3"></div>
         
         <div class="shooting-star" style="top: 10%; left: 80%; animation-delay: 0s;"></div>
-        <div class="shooting-star" style="top: 30%; left: 90%; animation-delay: 2s;"></div>
-        <div class="shooting-star" style="top: 5%; left: 50%; animation-delay: 4s;"></div>
+        <div class="shooting-star" style="top: 30%; left: 90%; animation-delay: 6s;"></div>
+        <div class="shooting-star" style="top: 5%; left: 50%; animation-delay: 12s;"></div>
     </div>
 
     <!-- Main Container -->
-    <main class="container">
-        <div class="glass-card" id="loginCard">
-            <h1>Identity Verification</h1>
-            <p class="subtitle">Please enter your name to proceed</p>
+    <main class="container fade-in" id="mainContent">
+        <div class="terminal-interface">
+            <h1 class="prompt-text">enter ur name<span class="blinking-cursor">_</span></h1>
             
-            <div class="input-group">
-                <input type="text" id="nameInput" placeholder="Enter Your Name" autocomplete="off">
+            <div class="input-wrapper">
+                <span class="prompt-symbol">></span>
+                <input type="text" id="nameInput" autocomplete="off" spellcheck="false" autofocus>
             </div>
             
             <p class="error-message" id="errorMessage"></p>
             
-            <button id="submitBtn" class="neon-button">Submit</button>
+            <button id="submitBtn" class="text-button">[ execute ]</button>
         </div>
     </main>
 
     <!-- Success Popup -->
-    <div class="popup-overlay" id="successPopup">
-        <div class="popup-content">
-            <div class="glow-orb"></div>
-            <h2>I love you Habiba :)</h2>
-            <p>And I will marry you InshaAllah :')</p>
+    <div class="terminal-popup" id="successPopup">
+        <div class="success-content">
+            <p class="success-line1">i love you habiba :)</p>
+            <p class="success-line2">i will marry you isa :')</p>
         </div>
     </div>
 
