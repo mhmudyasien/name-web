@@ -8,11 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const alienContainer = document.getElementById('alienContainer');
 
     const wrongMessages = [
-        "nah lil bro u not habiba :/",
-        "wrong galaxy my guy :')",
-        "ain't no way u her 💀",
-        "access denied lil bro 🚫",
-        "who is u??? 🤨"
+        "wrong galaxy bro :/",
+        "access denied my guy :')",
+        "u from another planet fr"
     ];
 
     // Function to play a soft romantic futuristic synth chord

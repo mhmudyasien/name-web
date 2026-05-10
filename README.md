@@ -19,7 +19,7 @@ A minimal, cinematic, and interactive space-themed terminal website built with p
 3. If the user enters anything else:
    - A glowing green alien smoothly floats up, blinks, and fades away.
    - The input field shakes.
-   - A funny slang error message appears (e.g., "nah lil bro u not habiba :/").
+   - A funny slang error message appears (e.g., "wrong galaxy bro :/").
 
 ## Deployment Instructions
 
