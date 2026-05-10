@@ -51,6 +51,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function playErrorSound() {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            
+            const audioCtx = new AudioContext();
+            const masterGain = audioCtx.createGain();
+            masterGain.connect(audioCtx.destination);
+            
+            // Short, punchy envelope for an error "buzz"
+            masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            masterGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.05);
+            masterGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+
+            // Dissonant, low frequencies for an electronic error sound
+            const frequencies = [120, 125];
+            
+            frequencies.forEach((freq) => {
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sawtooth'; 
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
+                osc.connect(masterGain);
+                
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.5);
+            });
+            
+        } catch (e) {
+            console.log("Audio not supported or blocked", e);
+        }
+    }
+
     function createHearts() {
         const numHearts = 30;
         for (let i = 0; i < numHearts; i++) {
@@ -138,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const randomMsg = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
             showFeedback(randomMsg, "error");
             
+            playErrorSound();
             spawnAlien();
             
             // Input shake effect
