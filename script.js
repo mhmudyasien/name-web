@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (name === 'habiba') {
             // Success
-            showFeedback("mahmoud lowkey loves u fr :) and finna marry u isa :')", "success");
+            showFeedback("mahmoud really loves u fr :) and will marry u isa :')", "success");
             playSuccessSound();
             createHearts();
         } else {
