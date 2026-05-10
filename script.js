@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const mainContent = document.getElementById('mainContent');
     const nameInput = document.getElementById('nameInput');
     const submitBtn = document.getElementById('submitBtn');
-    const errorMessage = document.getElementById('errorMessage');
-    const successPopup = document.getElementById('successPopup');
+    const feedbackMessage = document.getElementById('feedbackMessage');
     const heartsContainer = document.getElementById('heartsContainer');
     const alienContainer = document.getElementById('alienContainer');
 
@@ -126,26 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = nameInput.value.trim().toLowerCase();
         
         if (name === '') {
-            showError("enter a name first");
+            showFeedback("enter a name first", "error");
             return;
         }
 
         if (name === 'habiba') {
             // Success
-            errorMessage.classList.remove('visible');
-            mainContent.style.opacity = '0';
-            mainContent.style.pointerEvents = 'none';
-            
-            setTimeout(() => {
-                successPopup.classList.add('active');
-                playSuccessSound();
-                createHearts();
-            }, 800); // Wait for main content to fade out
-            
+            showFeedback("mahmoud lowkey loves u fr :) and finna marry u isa :')", "success");
+            playSuccessSound();
+            createHearts();
         } else {
             // Failure
             const randomMsg = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
-            showError(randomMsg);
+            showFeedback(randomMsg, "error");
             
             spawnAlien();
             
@@ -162,9 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function showError(msg) {
-        errorMessage.textContent = msg;
-        errorMessage.classList.add('visible');
+    function showFeedback(msg, type) {
+        feedbackMessage.textContent = msg;
+        feedbackMessage.className = `feedback-message visible ${type}`;
     }
 
     // Event Listeners
@@ -178,8 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Clear error on typing
     nameInput.addEventListener('input', () => {
-        if (errorMessage.classList.contains('visible')) {
-            errorMessage.classList.remove('visible');
+        if (feedbackMessage.classList.contains('visible')) {
+            feedbackMessage.classList.remove('visible');
             nameInput.style.borderBottomColor = 'rgba(138, 43, 226, 0.4)';
         }
     });
