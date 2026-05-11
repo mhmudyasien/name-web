@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             createBalloons();
             
             // Show graduation message
-            gradMessage.textContent = "congrates for you graduation biba 🎉🎓";
+            gradMessage.textContent = "Congrats on your graduation, Biba! 🎉🎓";
             gradMessage.classList.add('visible');
             
             // Show notify button
