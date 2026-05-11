@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('nameInput');
     const submitBtn = document.getElementById('submitBtn');
+    const notifyBtn = document.getElementById('notifyBtn');
     const feedbackMessage = document.getElementById('feedbackMessage');
     const heartsContainer = document.getElementById('heartsContainer');
     const alienContainer = document.getElementById('alienContainer');
@@ -166,8 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
             showFeedback("mahmoud really loves u fr :) and will marry u isa :')", "success");
             playSuccessSound();
             createHearts();
+            
+            // Show notify button
+            notifyBtn.classList.add('visible');
+            notifyBtn.textContent = "tell him i'm here 💌";
+            notifyBtn.disabled = false;
         } else {
             // Failure
+            notifyBtn.classList.remove('visible');
             const randomMsg = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
             showFeedback(randomMsg, "error");
             
@@ -205,7 +211,39 @@ document.addEventListener('DOMContentLoaded', () => {
     nameInput.addEventListener('input', () => {
         if (feedbackMessage.classList.contains('visible')) {
             feedbackMessage.classList.remove('visible');
+            notifyBtn.classList.remove('visible');
             nameInput.style.borderBottomColor = 'rgba(138, 43, 226, 0.4)';
+        }
+    });
+
+    // Notify Button Logic (Formspree)
+    notifyBtn.addEventListener('click', async () => {
+        notifyBtn.disabled = true;
+        notifyBtn.textContent = "sending...";
+        
+        try {
+            // REPLACE "YOUR_FORM_ID" WITH YOUR ACTUAL FORMSPREE ID
+            const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ 
+                    message: "Habiba is on the website right now and clicked the button! 💖",
+                    timestamp: new Date().toLocaleString()
+                })
+            });
+            
+            if (response.ok) {
+                notifyBtn.textContent = "notification sent! ✨";
+            } else {
+                notifyBtn.textContent = "error sending :(";
+                notifyBtn.disabled = false;
+            }
+        } catch (e) {
+            notifyBtn.textContent = "error sending :(";
+            notifyBtn.disabled = false;
         }
     });
 });

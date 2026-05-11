@@ -210,6 +210,36 @@ input:focus {
     transform: translateY(-2px);
 }
 
+/* Notify Button */
+.notify-button {
+    background: transparent;
+    color: #ff66b3;
+    border: 1px solid rgba(255, 102, 179, 0.4);
+    font-size: 0.9rem;
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+    text-transform: lowercase;
+    transition: all 0.3s ease;
+    padding: 8px 15px;
+    border-radius: 20px;
+    margin-top: 15px;
+    display: none;
+    opacity: 0;
+}
+
+.notify-button.visible {
+    display: block;
+    opacity: 1;
+    animation: fadeIn 1s ease forwards;
+}
+
+.notify-button:hover {
+    color: #ffffff;
+    background: rgba(255, 102, 179, 0.2);
+    border-color: #ff66b3;
+    box-shadow: 0 0 10px rgba(255, 102, 179, 0.5);
+}
+
 /* Effects Containers */
 .effects-container {
     position: fixed;
