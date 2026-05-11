@@ -222,8 +222,7 @@
         notifyBtn.textContent = "sending...";
         
         try {
-            // REPLACE "YOUR_FORM_ID" WITH YOUR ACTUAL FORMSPREE ID
-            const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+            const response = await fetch("https://formspree.io/f/mlgzaejg", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
