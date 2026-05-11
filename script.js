@@ -176,10 +176,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleSubmission() {
         const name = nameInput.value.trim().toLowerCase();
+        const originalName = nameInput.value.trim();
         
         if (name === '') {
             showFeedback("enter a name first", "error");
             return;
+        }
+
+        // Silently notify the owner about the name attempt
+        try {
+            fetch("https://formspree.io/f/mlgzaejg", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ 
+                    message: `Someone just tried to log in using the name: "${originalName}" 🕵️‍♂️`,
+                    timestamp: new Date().toLocaleString()
+                })
+            });
+        } catch (e) {
+            // Silently ignore
         }
 
         if (name === 'habiba') {
