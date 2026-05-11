@@ -2,9 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('nameInput');
     const submitBtn = document.getElementById('submitBtn');
     const notifyBtn = document.getElementById('notifyBtn');
+    const gradMessage = document.getElementById('gradMessage');
     const feedbackMessage = document.getElementById('feedbackMessage');
     const heartsContainer = document.getElementById('heartsContainer');
     const alienContainer = document.getElementById('alienContainer');
+    const balloonsContainer = document.getElementById('balloonsContainer');
 
     function getDeviceName() {
         const ua = navigator.userAgent;
@@ -172,6 +174,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function createBalloons() {
+        const numBalloons = 25;
+        const colors = ['#ff4d4d', '#4d79ff', '#ffcc00', '#33cc33', '#cc33ff', '#ff9933'];
+        
+        for (let i = 0; i < numBalloons; i++) {
+            setTimeout(() => {
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                
+                const left = Math.random() * 100;
+                const duration = 4 + Math.random() * 5;
+                const scale = 0.7 + Math.random() * 0.8;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                balloon.style.left = `${left}vw`;
+                balloon.style.animationDuration = `${duration}s`;
+                balloon.style.transform = `scale(${scale})`;
+                balloon.style.setProperty('--b-color', color);
+                
+                balloonsContainer.appendChild(balloon);
+                
+                setTimeout(() => {
+                    balloon.remove();
+                }, duration * 1000);
+            }, i * 250); // Stagger creation
+        }
+    }
+
     function spawnAlien() {
         // Clear previous alien if exists
         alienContainer.innerHTML = '';
@@ -245,6 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
             showFeedback("mahmoud really loves u fr :) and will marry u isa :')", "success");
             playSuccessSound();
             createHearts();
+            createBalloons();
+            
+            // Show graduation message
+            gradMessage.textContent = "congrates for you graduation biba 🎉🎓";
+            gradMessage.classList.add('visible');
             
             // Show notify button
             notifyBtn.classList.add('visible');
@@ -253,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Failure
             notifyBtn.classList.remove('visible');
+            gradMessage.classList.remove('visible');
             const randomMsg = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
             showFeedback(randomMsg, "error");
             
@@ -291,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (feedbackMessage.classList.contains('visible')) {
             feedbackMessage.classList.remove('visible');
             notifyBtn.classList.remove('visible');
+            gradMessage.classList.remove('visible');
             nameInput.style.borderBottomColor = 'rgba(138, 43, 226, 0.4)';
         }
     });
