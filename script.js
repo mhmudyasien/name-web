@@ -263,6 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
             notifyBtn.classList.add('visible');
             notifyBtn.textContent = "tell him i'm here 💌";
             notifyBtn.disabled = false;
+        } else if (name === 'hana') {
+            // Special message for Hana
+            showFeedback("ro7y zakry ya Hana", "error");
+            playErrorSound();
+            spawnAlien();
         } else {
             // Failure
             notifyBtn.classList.remove('visible');
