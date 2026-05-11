@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('nameInput');
     const submitBtn = document.getElementById('submitBtn');
     const notifyBtn = document.getElementById('notifyBtn');
