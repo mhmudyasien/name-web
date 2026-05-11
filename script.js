@@ -6,10 +6,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const heartsContainer = document.getElementById('heartsContainer');
     const alienContainer = document.getElementById('alienContainer');
 
+    function getDeviceName() {
+        const ua = navigator.userAgent;
+        if (/iPhone/.test(ua)) {
+            // Infer iPhone model based on logical screen resolution and pixel ratio
+            const w = Math.min(window.screen.width, window.screen.height);
+            const h = Math.max(window.screen.width, window.screen.height);
+            const ratio = window.devicePixelRatio;
+
+            if (w === 430 && h === 932) return "iPhone 14 Pro Max / 15 Plus / 15 Pro Max";
+            if (w === 393 && h === 852) return "iPhone 14 Pro / 15 / 15 Pro";
+            if (w === 428 && h === 926) return "iPhone 12 Pro Max / 13 Pro Max / 14 Plus";
+            if (w === 390 && h === 844) return "iPhone 12 / 12 Pro / 13 / 13 Pro / 14";
+            if (w === 375 && h === 812) return "iPhone X / XS / 11 Pro / 12 mini / 13 mini";
+            if (w === 414 && h === 896) return ratio === 2 ? "iPhone XR / 11" : "iPhone XS Max / 11 Pro Max";
+            if (w === 414 && h === 736) return "iPhone 6/7/8 Plus";
+            if (w === 375 && h === 667) return "iPhone 6/7/8 / SE (2nd/3rd gen)";
+            if (w === 320 && h === 568) return "iPhone 5/5S / SE (1st gen)";
+            return "iPhone (New or Unknown)";
+        }
+        if (/iPad/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+            return "iPad";
+        }
+        if (/Android/.test(ua)) {
+            const match = ua.match(/Android.*?; (.*?) Build/);
+            return match ? `Android (${match[1]})` : "Android Device";
+        }
+        if (/Mac/.test(ua)) return "MacBook / Mac";
+        if (/Windows/.test(ua)) return "Windows PC";
+        
+        return "Unknown Device";
+    }
+
     // Automatically notify you when someone visits the site (once per session to avoid spam)
     if (!sessionStorage.getItem('visitorNotified')) {
         try {
-            const deviceInfo = navigator.userAgent;
+            const deviceInfo = getDeviceName();
             const platformInfo = navigator.platform || 'Unknown';
             
             fetch("https://formspree.io/f/mlgzaejg", {
@@ -190,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Silently notify the owner about the name attempt
         try {
-            const deviceInfo = navigator.userAgent;
+            const deviceInfo = getDeviceName();
             
             fetch("https://formspree.io/f/mlgzaejg", {
                 method: "POST",
