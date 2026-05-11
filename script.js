@@ -40,30 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return "Unknown Device";
     }
 
-    // Automatically notify you when someone visits the site (once per session to avoid spam)
-    if (!sessionStorage.getItem('visitorNotified')) {
-        try {
-            const deviceInfo = getDeviceName();
-            const platformInfo = navigator.platform || 'Unknown';
-            
-            fetch("https://formspree.io/f/mlgzaejg", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ 
-                    message: "A new visitor has just arrived on the website! 👀",
-                    device_info: deviceInfo,
-                    platform: platformInfo,
-                    timestamp: new Date().toLocaleString()
-                })
-            });
-            sessionStorage.setItem('visitorNotified', 'true');
-        } catch (e) {
-            // Silently ignore errors
-        }
-    }
+    // Automatic visitor notification removed as per user request
+
 
     const wrongMessages = [
         "wrong galaxy bro :/",
@@ -254,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const deviceInfo = getDeviceName();
             
-            fetch("https://formspree.io/f/mlgzaejg", {
+            fetch("https://formspree.io/f/maqvayvr", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -338,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         notifyBtn.textContent = "sending...";
         
         try {
-            const response = await fetch("https://formspree.io/f/mlgzaejg", {
+            const response = await fetch("https://formspree.io/f/maqvayvr", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
