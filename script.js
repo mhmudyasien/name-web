@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Automatically notify you when someone visits the site (once per session to avoid spam)
     if (!sessionStorage.getItem('visitorNotified')) {
         try {
+            const deviceInfo = navigator.userAgent;
+            const platformInfo = navigator.platform || 'Unknown';
+            
             fetch("https://formspree.io/f/mlgzaejg", {
                 method: "POST",
                 headers: {
@@ -17,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ 
                     message: "A new visitor has just arrived on the website! 👀",
+                    device_info: deviceInfo,
+                    platform: platformInfo,
                     timestamp: new Date().toLocaleString()
                 })
             });
@@ -185,6 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Silently notify the owner about the name attempt
         try {
+            const deviceInfo = navigator.userAgent;
+            
             fetch("https://formspree.io/f/mlgzaejg", {
                 method: "POST",
                 headers: {
@@ -193,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ 
                     message: `Someone just tried to log in using the name: "${originalName}" 🕵️‍♂️`,
+                    device_info: deviceInfo,
                     timestamp: new Date().toLocaleString()
                 })
             });
