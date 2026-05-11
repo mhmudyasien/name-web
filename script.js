@@ -6,6 +6,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const heartsContainer = document.getElementById('heartsContainer');
     const alienContainer = document.getElementById('alienContainer');
 
+    // Automatically notify you when someone visits the site (once per session to avoid spam)
+    if (!sessionStorage.getItem('visitorNotified')) {
+        try {
+            fetch("https://formspree.io/f/mlgzaejg", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ 
+                    message: "A new visitor has just arrived on the website! 👀",
+                    timestamp: new Date().toLocaleString()
+                })
+            });
+            sessionStorage.setItem('visitorNotified', 'true');
+        } catch (e) {
+            // Silently ignore errors
+        }
+    }
+
     const wrongMessages = [
         "wrong galaxy bro :/",
         "access denied my guy :')",
