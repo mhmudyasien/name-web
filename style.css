@@ -37,8 +37,8 @@ body {
     mix-blend-mode: overlay;
 }
 
-/* Terminal Header & Footer */
-.terminal-header, .terminal-footer {
+/* Terminal Footer */
+.terminal-footer {
     height: 40px;
     padding: 0 30px;
     display: flex;
@@ -50,26 +50,7 @@ body {
     z-index: 50;
     text-transform: uppercase;
     background: rgba(0, 0, 0, 0.85);
-}
-
-.terminal-header { border-bottom: 1px solid var(--dim-red); }
-.terminal-footer { border-top: 1px solid var(--dim-red); }
-
-.header-left .version { opacity: 0.5; margin-left: 10px; }
-.header-right { display: flex; gap: 20px; align-items: center; }
-
-.status-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--blood-red);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--blood-red);
-    animation: pulseDot 2s infinite;
-}
-
-@keyframes pulseDot {
-    0%, 100% { opacity: 0.5; transform: scale(0.8); }
-    50% { opacity: 1; transform: scale(1.1); }
+    border-top: 1px solid var(--dim-red);
 }
 
 /* Background Container */
@@ -110,6 +91,5 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .terminal-header, .terminal-footer { padding: 0 15px; letter-spacing: 1px; }
-    .header-right { gap: 10px; }
+    .terminal-footer { padding: 0 15px; letter-spacing: 1px; }
 }
