@@ -205,3 +205,19 @@ textarea {
 @media (max-width: 768px) {
     .modal-content { padding: 25px; width: 95%; }
 }
+
+.upset-msg {
+    color: #ff4d4d;
+    font-size: 1rem;
+    font-weight: normal;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 0, 0, 0.05);
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    font-family: 'Space Mono', monospace;
+    max-width: 300px;
+    margin: 0 auto;
+}
+

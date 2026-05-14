@@ -10,6 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendBtn = document.getElementById('sendBtn');
     const messageInput = document.getElementById('hiddenMessage');
     const feedback = document.getElementById('feedback');
+    const upsetMsg = document.getElementById('upsetMessage');
+
+    // --- Visit Tracking Logic ---
+    const visitCount = parseInt(localStorage.getItem('visitCount') || '0');
+    const messageSent = localStorage.getItem('messageSent') === 'true';
+
+    if (visitCount > 0 && !messageSent) {
+        toggleBtn.style.display = 'none';
+        upsetMsg.style.display = 'block';
+    }
+
+    // Increment visit count for next time
+    localStorage.setItem('visitCount', visitCount + 1);
 
     // --- Modal Logic ---
     toggleBtn.addEventListener('click', () => {
@@ -60,6 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 showFeedback("message received by the void", "success");
                 messageInput.value = "";
+                // Mark message as sent
+                localStorage.setItem('messageSent', 'true');
+                
                 setTimeout(() => {
                     modal.classList.remove('active');
                     resetFeedback();
