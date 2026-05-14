@@ -1,347 +1,157 @@
+/**
+ * Mahmoudverse - Cinematic Script
+ * Handles: Mouse tracking, Blinking, Random Eye Movement, 
+ * Ambient Particles, and Shooting Stars.
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    const nameInput = document.getElementById('nameInput');
-    const submitBtn = document.getElementById('submitBtn');
-    const notifyBtn = document.getElementById('notifyBtn');
-    const gradMessage = document.getElementById('gradMessage');
-    const feedbackMessage = document.getElementById('feedbackMessage');
-    const heartsContainer = document.getElementById('heartsContainer');
-    const alienContainer = document.getElementById('alienContainer');
-    const balloonsContainer = document.getElementById('balloonsContainer');
+    const eyes = document.querySelectorAll('.eye-container');
+    const irises = document.querySelectorAll('.iris');
+    const shootingStarsContainer = document.getElementById('shootingStarsContainer');
+    const particlesContainer = document.getElementById('particlesContainer');
 
-    function getDeviceName() {
-        const ua = navigator.userAgent;
-        if (/iPhone/.test(ua)) {
-            // Infer iPhone model based on logical screen resolution and pixel ratio
-            const w = Math.min(window.screen.width, window.screen.height);
-            const h = Math.max(window.screen.width, window.screen.height);
-            const ratio = window.devicePixelRatio;
+    // --- State ---
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
 
-            if (w === 430 && h === 932) return "iPhone 14 Pro Max";
-            if (w === 393 && h === 852) return "iPhone 14 Pro";
-            if (w === 428 && h === 926) return "iPhone 13 Pro Max";
-            if (w === 390 && h === 844) return "iPhone 13 Pro";
-            if (w === 375 && h === 812) return "iPhone 11 Pro";
-            if (w === 414 && h === 896) return ratio === 2 ? "iPhone 11" : "iPhone 11 Pro Max";
-            if (w === 414 && h === 736) return "iPhone 8 Plus";
-            if (w === 375 && h === 667) return "iPhone SE";
-            if (w === 320 && h === 568) return "iPhone 5S";
-            return "iPhone";
-        }
-        if (/iPad/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
-            return "iPad";
-        }
-        if (/Android/.test(ua)) {
-            const match = ua.match(/Android.*?; (.*?) Build/);
-            return match ? `Android (${match[1]})` : "Android Device";
-        }
-        if (/Mac/.test(ua)) return "MacBook / Mac";
-        if (/Windows/.test(ua)) return "Windows PC";
-        
-        return "Unknown Device";
+    // --- Mouse Tracking ---
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    // --- Eye Logic ---
+    function updateEyes() {
+        // Calculate the distance and angle for eye tracking
+        eyes.forEach((eye, index) => {
+            const iris = irises[index];
+            const rect = eye.getBoundingClientRect();
+            const eyeCenterX = rect.left + rect.width / 2;
+            const eyeCenterY = rect.top + rect.height / 2;
+
+            const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
+            const dist = Math.min(Math.hypot(mouseX - eyeCenterX, mouseY - eyeCenterY) / 15, 12);
+
+            // Calculate target offset
+            const tx = Math.cos(angle) * dist;
+            const ty = Math.sin(angle) * dist;
+
+            // Smooth interpolation for "emotional tiredness"
+            currentX += (tx - currentX) * 0.05;
+            currentY += (ty - currentY) * 0.05;
+
+            iris.style.transform = `translate(${currentX}px, ${currentY}px)`;
+            
+            // Subtle container rotation
+            eye.style.transform = `rotateX(${-currentY * 0.5}deg) rotateY(${currentX * 0.5}deg)`;
+        });
+
+        requestAnimationFrame(updateEyes);
     }
 
-    // Automatic visitor notification removed as per user request
-
-
-    const wrongMessages = [
-        "wrong galaxy bro :/",
-        "access denied my guy :')",
-        "u from another planet fr"
-    ];
-
-    // Function to play a soft romantic futuristic synth chord
-    function playSuccessSound() {
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            
-            const audioCtx = new AudioContext();
-            const masterGain = audioCtx.createGain();
-            masterGain.connect(audioCtx.destination);
-            
-            masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-            masterGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 1.5);
-            masterGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 6);
-
-            // Romantic lush chord (Maj7)
-            const frequencies = [261.63, 329.63, 392.00, 493.88]; // C4, E4, G4, B4
-            
-            frequencies.forEach((freq, index) => {
-                const osc = audioCtx.createOscillator();
-                osc.type = 'sine'; 
-                
-                // Add slight detune for a futuristic lush feel
-                osc.detune.value = index * 5; 
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                
-                const oscGain = audioCtx.createGain();
-                oscGain.gain.value = 0.4;
-                
-                osc.connect(oscGain);
-                oscGain.connect(masterGain);
-                
-                osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 7);
-            });
-            
-        } catch (e) {
-            console.log("Audio not supported or blocked", e);
-        }
-    }
-
-    function playErrorSound() {
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            
-            const audioCtx = new AudioContext();
-            const masterGain = audioCtx.createGain();
-            masterGain.connect(audioCtx.destination);
-            
-            // Short, punchy envelope for an error "buzz"
-            masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-            masterGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.05);
-            masterGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-
-            // Dissonant, low frequencies for an electronic error sound
-            const frequencies = [120, 125];
-            
-            frequencies.forEach((freq) => {
-                const osc = audioCtx.createOscillator();
-                osc.type = 'sawtooth'; 
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                
-                osc.connect(masterGain);
-                
-                osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 0.5);
-            });
-            
-        } catch (e) {
-            console.log("Audio not supported or blocked", e);
-        }
-    }
-
-    function createHearts() {
-        const numHearts = 30;
-        for (let i = 0; i < numHearts; i++) {
-            setTimeout(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                
-                // Random properties
-                const left = Math.random() * 100;
-                const duration = 3 + Math.random() * 4;
-                const scale = 0.5 + Math.random() * 1;
-                
-                heart.style.left = `${left}vw`;
-                heart.style.animationDuration = `${duration}s`;
-                heart.style.transform = `scale(${scale})`;
-                
-                // Alternate colors for a neon futuristic vibe
-                const colors = ['#ff66b3', '#b366ff', '#ff4d4d'];
-                heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                heartsContainer.appendChild(heart);
-                
-                // Cleanup
-                setTimeout(() => {
-                    heart.remove();
-                }, duration * 1000);
-            }, i * 150); // Stagger creation
-        }
-    }
-
-    function createBalloons() {
-        const numBalloons = 25;
-        const colors = ['#ff4d4d', '#4d79ff', '#ffcc00', '#33cc33', '#cc33ff', '#ff9933'];
+    // --- Random Blinking ---
+    function blink() {
+        eyes.forEach(eye => eye.classList.add('blink'));
         
-        for (let i = 0; i < numBalloons; i++) {
-            setTimeout(() => {
-                const balloon = document.createElement('div');
-                balloon.classList.add('balloon');
-                
-                const left = Math.random() * 100;
-                const duration = 4 + Math.random() * 5;
-                const scale = 0.7 + Math.random() * 0.8;
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                
-                balloon.style.left = `${left}vw`;
-                balloon.style.animationDuration = `${duration}s`;
-                balloon.style.transform = `scale(${scale})`;
-                balloon.style.setProperty('--b-color', color);
-                
-                balloonsContainer.appendChild(balloon);
-                
-                setTimeout(() => {
-                    balloon.remove();
-                }, duration * 1000);
-            }, i * 250); // Stagger creation
-        }
-    }
-
-    function spawnAlien() {
-        // Clear previous alien if exists
-        alienContainer.innerHTML = '';
-        
-        const alienWrapper = document.createElement('div');
-        alienWrapper.classList.add('alien-wrapper');
-        
-        // Simple SVG Alien
-        alienWrapper.innerHTML = `
-            <svg class="alien-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <!-- Head -->
-                <ellipse cx="50" cy="50" rx="40" ry="30" />
-                <path d="M 10 50 Q 50 90 90 50 Z" />
-                <!-- Eyes -->
-                <g class="alien-eye" transform="translate(30, 45)">
-                    <ellipse cx="0" cy="0" rx="8" ry="12" transform="rotate(-20)" />
-                </g>
-                <g class="alien-eye" transform="translate(70, 45)">
-                    <ellipse cx="0" cy="0" rx="8" ry="12" transform="rotate(20)" />
-                </g>
-                <!-- Mouth -->
-                <path d="M 45 70 Q 50 72 55 70" stroke="#000" stroke-width="2" fill="none" />
-            </svg>
-        `;
-        
-        // Randomize alien position horizontally slightly
-        const offset = (Math.random() - 0.5) * 40;
-        alienWrapper.style.transform = `translateX(calc(-50% + ${offset}px))`;
-        
-        alienContainer.appendChild(alienWrapper);
-        
-        // Cleanup after animation
+        // Duration of a blink
         setTimeout(() => {
-            if(alienWrapper.parentNode) {
-                alienWrapper.remove();
-            }
-        }, 5000);
+            eyes.forEach(eye => eye.classList.remove('blink'));
+        }, 150);
+
+        // Schedule next blink randomly (between 3 to 8 seconds)
+        const nextBlink = 3000 + Math.random() * 5000;
+        setTimeout(blink, nextBlink);
     }
 
-    function handleSubmission() {
-        const name = nameInput.value.trim().toLowerCase();
-        const originalName = nameInput.value.trim();
+    // --- Random Pupil Look (Occasional wandering) ---
+    function wander() {
+        // Only wander if mouse hasn't moved much recently
+        // For simplicity, we just add a random bias every few seconds
+        const biasX = (Math.random() - 0.5) * 10;
+        const biasY = Math.random() * 5; // Look slightly down more often (tired)
         
-        if (name === '') {
-            showFeedback("enter a name first", "error");
-            return;
-        }
+        targetX = biasX;
+        targetY = biasY;
 
-        // Silently notify the owner about the name attempt
-        try {
-            const deviceInfo = getDeviceName();
-            
-            fetch("https://formspree.io/f/maqvayvr", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ 
-                    message: `Someone just tried to log in using the name: "${originalName}" 🕵️‍♂️`,
-                    device_info: deviceInfo,
-                    timestamp: new Date().toLocaleString()
-                })
-            });
-        } catch (e) {
-            // Silently ignore
-        }
+        setTimeout(wander, 2000 + Math.random() * 4000);
+    }
 
-        if (name === 'habiba') {
-            // Success
-            showFeedback("hello habiba hru , I really do care about u", "success");
-            playSuccessSound();
-            createHearts();
-            createBalloons();
-            
-            // Show graduation message
-            gradMessage.textContent = "Congrats on your graduation ya Biba! 🎉🎓";
-            gradMessage.classList.add('visible');
-            
-            // Show notify button
-            notifyBtn.classList.add('visible');
-            notifyBtn.textContent = "tell him i'm here 💌";
-            notifyBtn.disabled = false;
-        } else if (name === 'hana') {
-            // Special message for Hana
-            showFeedback("ro7y zakry ya Hana", "error");
-            playErrorSound();
-            spawnAlien();
-        } else {
-            // Failure
-            notifyBtn.classList.remove('visible');
-            gradMessage.classList.remove('visible');
-            const randomMsg = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
-            showFeedback(randomMsg, "error");
-            
-            playErrorSound();
-            spawnAlien();
-            
-            // Input shake effect
-            nameInput.classList.remove('shake');
-            void nameInput.offsetWidth; // trigger reflow
-            nameInput.classList.add('shake');
-            
-            nameInput.style.borderBottomColor = '#ff4d4d';
-            
-            setTimeout(() => {
-                nameInput.style.borderBottomColor = 'rgba(138, 43, 226, 0.4)';
-            }, 800);
+    // --- Ambient Particles ---
+    function initParticles() {
+        const count = 40;
+        for (let i = 0; i < count; i++) {
+            createParticle();
         }
     }
 
-    function showFeedback(msg, type) {
-        feedbackMessage.textContent = msg;
-        feedbackMessage.className = `feedback-message visible ${type}`;
-    }
-
-    // Event Listeners
-    submitBtn.addEventListener('click', handleSubmission);
-
-    nameInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleSubmission();
-        }
-    });
-    
-    // Clear error on typing
-    nameInput.addEventListener('input', () => {
-        if (feedbackMessage.classList.contains('visible')) {
-            feedbackMessage.classList.remove('visible');
-            notifyBtn.classList.remove('visible');
-            gradMessage.classList.remove('visible');
-            nameInput.style.borderBottomColor = 'rgba(138, 43, 226, 0.4)';
-        }
-    });
-
-    // Notify Button Logic (Formspree)
-    notifyBtn.addEventListener('click', async () => {
-        notifyBtn.disabled = true;
-        notifyBtn.textContent = "sending...";
+    function createParticle() {
+        const p = document.createElement('div');
+        p.className = 'particle';
         
-        try {
-            const response = await fetch("https://formspree.io/f/maqvayvr", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ 
-                    message: "Habiba is on the website right now and clicked the button! 💖",
-                    timestamp: new Date().toLocaleString()
-                })
-            });
-            
-            if (response.ok) {
-                notifyBtn.textContent = "notification sent! ✨";
-            } else {
-                notifyBtn.textContent = "error sending :(";
-                notifyBtn.disabled = false;
-            }
-        } catch (e) {
-            notifyBtn.textContent = "error sending :(";
-            notifyBtn.disabled = false;
-        }
-    });
+        const size = Math.random() * 2 + 1;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const duration = 10 + Math.random() * 20;
+        const delay = -Math.random() * 20;
+
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${x}vw`;
+        p.style.top = `${y}vh`;
+        p.style.opacity = Math.random() * 0.3;
+        
+        // Floating animation
+        p.animate([
+            { transform: `translate(0, 0)`, opacity: 0 },
+            { transform: `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px)`, opacity: 0.3 },
+            { transform: `translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px)`, opacity: 0 }
+        ], {
+            duration: duration * 1000,
+            delay: delay * 1000,
+            iterations: Infinity,
+            easing: 'ease-in-out'
+        });
+
+        particlesContainer.appendChild(p);
+    }
+
+    // --- Shooting Stars ---
+    function spawnShootingStar() {
+        const star = document.createElement('div');
+        star.className = 'shooting-star';
+        
+        const startX = Math.random() * window.innerWidth;
+        const startY = Math.random() * window.innerHeight * 0.5;
+        const angle = 45; // Fixed diagonal path
+        
+        star.style.left = `${startX}px`;
+        star.style.top = `${startY}px`;
+        star.style.transform = `rotate(${angle}deg)`;
+
+        shootingStarsContainer.appendChild(star);
+
+        const duration = 1000 + Math.random() * 1000;
+        
+        star.animate([
+            { transform: `rotate(${angle}deg) translateX(0)`, opacity: 0 },
+            { transform: `rotate(${angle}deg) translateX(0)`, opacity: 1, offset: 0.1 },
+            { transform: `rotate(${angle}deg) translateX(-400px)`, opacity: 0 }
+        ], {
+            duration: duration,
+            easing: 'linear'
+        }).onfinish = () => star.remove();
+
+        setTimeout(spawnShootingStar, 5000 + Math.random() * 10000);
+    }
+
+    // --- Init ---
+    updateEyes();
+    blink();
+    wander();
+    initParticles();
+    spawnShootingStar();
 });

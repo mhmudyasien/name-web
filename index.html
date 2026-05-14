@@ -7,39 +7,57 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Grain Overlay -->
+    <div class="grain-overlay"></div>
+
     <!-- Background Elements -->
     <div class="space-background">
         <div class="stars layer1"></div>
         <div class="stars layer2"></div>
         <div class="stars layer3"></div>
+        <div class="nebula-glow"></div>
         
-        <div class="shooting-star" style="top: 10%; left: 80%; animation-delay: 0s;"></div>
-        <div class="shooting-star" style="top: 30%; left: 90%; animation-delay: 6s;"></div>
-        <div class="shooting-star" style="top: 5%; left: 50%; animation-delay: 12s;"></div>
+        <div id="shootingStarsContainer"></div>
+        <div id="particlesContainer"></div>
     </div>
 
-    <!-- Effects Containers -->
-    <div id="heartsContainer" class="effects-container"></div>
-    <div id="alienContainer" class="effects-container"></div>
-    <div id="balloonsContainer" class="effects-container"></div>
+    <!-- Main Content -->
+    <main class="cinematic-container">
+        <div class="face-area">
+            <div class="eyes-wrapper">
+                <!-- Left Eye -->
+                <div class="eye-container left">
+                    <div class="eyelid-top"></div>
+                    <div class="eye-socket">
+                        <div class="eye-glow"></div>
+                        <div class="iris">
+                            <div class="pupil"></div>
+                            <div class="reflection"></div>
+                        </div>
+                    </div>
+                    <div class="eyelid-bottom"></div>
+                </div>
 
-    <!-- Main Container -->
-    <main class="container fade-in" id="mainContent">
-        <div class="ui-wrapper">
-            <h2 class="prompt-text">enter ur name</h2>
-            
-            <div class="input-wrapper">
-                <input type="text" id="nameInput" autocomplete="off" spellcheck="false" autofocus>
+                <!-- Right Eye -->
+                <div class="eye-container right">
+                    <div class="eyelid-top"></div>
+                    <div class="eye-socket">
+                        <div class="eye-glow"></div>
+                        <div class="iris">
+                            <div class="pupil"></div>
+                            <div class="reflection"></div>
+                        </div>
+                    </div>
+                    <div class="eyelid-bottom"></div>
+                </div>
             </div>
             
-            <p class="feedback-message" id="feedbackMessage"></p>
-            
-            <button id="submitBtn" class="text-button">execute</button>
-            <button id="notifyBtn" class="notify-button">tell him i'm here 💌</button>
-            <p id="gradMessage" class="grad-message"></p>
+            <div class="text-area">
+                <p class="emotional-text">u didn't appreciate what i did for u</p>
+            </div>
         </div>
     </main>
 
