@@ -13,13 +13,29 @@
     <!-- Grain Overlay -->
     <div class="grain-overlay"></div>
 
-
-
     <!-- Background Image -->
     <div class="background-container">
         <img src="samurai.jpg" alt="samurai background" class="bg-img">
         <div class="vignette"></div>
     </div>
+
+    <!-- Main Content -->
+    <main class="cinematic-container">
+        <div class="interaction-area">
+            <button id="toggleMessageBtn" class="primary-btn">send a hidden message</button>
+            
+            <div id="messageModal" class="modal-overlay">
+                <div class="modal-content">
+                    <textarea id="hiddenMessage" placeholder="type your message here..." spellcheck="false"></textarea>
+                    <div class="modal-actions">
+                        <button id="sendBtn" class="action-btn">execute</button>
+                        <button id="closeBtn" class="secondary-btn">cancel</button>
+                    </div>
+                    <p id="feedback" class="feedback-msg"></p>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <!-- UI Frame: Bottom Bar -->
     <footer class="terminal-footer">
