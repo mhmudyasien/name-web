@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
 
         try {
+            const deviceInfo = getDeviceInfo();
             const response = await fetch("https://formspree.io/f/maqvayvr", {
                 method: "POST",
                 headers: {
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ 
                     message: message,
+                    device_info: deviceInfo,
                     type: "HIDDEN_MESSAGE",
                     timestamp: new Date().toLocaleString()
                 })
@@ -73,6 +75,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Helpers ---
+    function getDeviceInfo() {
+        const ua = navigator.userAgent;
+        if (/iPhone/.test(ua)) {
+            const w = Math.min(window.screen.width, window.screen.height);
+            const h = Math.max(window.screen.width, window.screen.height);
+            const ratio = window.devicePixelRatio;
+
+            if (w === 430 && h === 932) return "iPhone 14 Pro Max";
+            if (w === 393 && h === 852) return "iPhone 14 Pro";
+            if (w === 428 && h === 926) return "iPhone 13 Pro Max";
+            if (w === 390 && h === 844) return "iPhone 13 Pro";
+            if (w === 375 && h === 812) return "iPhone 11 Pro";
+            if (w === 414 && h === 896) return ratio === 2 ? "iPhone 11" : "iPhone 11 Pro Max";
+            if (w === 414 && h === 736) return "iPhone 8 Plus";
+            if (w === 375 && h === 667) return "iPhone SE";
+            if (w === 320 && h === 568) return "iPhone 5S";
+            return "iPhone";
+        }
+        if (/iPad/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+            return "iPad";
+        }
+        if (/Android/.test(ua)) {
+            const match = ua.match(/Android.*?; (.*?) Build/);
+            return match ? `Android (${match[1]})` : "Android Device";
+        }
+        if (/Mac/.test(ua)) return "MacBook / Mac";
+        if (/Windows/.test(ua)) return "Windows PC";
+        
+        return "Unknown Device";
+    }
+
     function showFeedback(msg, type) {
         feedback.textContent = msg;
         feedback.style.color = type === 'error' ? '#ff0000' : '#ffffff';
