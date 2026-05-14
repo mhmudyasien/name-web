@@ -13,11 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const upsetMsg = document.getElementById('upsetMessage');
 
     // --- Visit Tracking Logic ---
-    const visitCount = parseInt(localStorage.getItem('visitCount') || '0');
+    // localStorage persists across sessions
+    const globalVisitCount = parseInt(localStorage.getItem('globalVisitCount') || '0');
     const messageSent = localStorage.getItem('messageSent') === 'true';
+    
+    // sessionStorage resets when the tab is closed
+    const sessionVisitCount = parseInt(sessionStorage.getItem('sessionVisitCount') || '0');
 
-    // Hide button only on 2nd and 3rd visit (after 1st and 2nd refresh)
-    if (visitCount > 0 && visitCount < 3 && !messageSent) {
+    // Show upset message if: (returned from a previous visit) AND (this is the first load of the session - not a refresh) AND (no message sent)
+    if (globalVisitCount > 0 && sessionVisitCount === 0 && !messageSent) {
         toggleBtn.style.display = 'none';
         upsetMsg.style.display = 'block';
     } else {
@@ -25,8 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         upsetMsg.style.display = 'none';
     }
 
-    // Increment visit count for next time
-    localStorage.setItem('visitCount', visitCount + 1);
+    // Update counts
+    localStorage.setItem('globalVisitCount', globalVisitCount + 1);
+    sessionStorage.setItem('sessionVisitCount', sessionVisitCount + 1);
 
     // --- Modal Logic ---
     toggleBtn.addEventListener('click', () => {
