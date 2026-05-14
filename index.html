@@ -27,36 +27,19 @@
     <!-- Main Content -->
     <main class="cinematic-container">
         <div class="face-area">
-            <div class="eyes-wrapper">
-                <!-- Left Eye -->
-                <div class="eye-container left">
-                    <div class="eyelid-top"></div>
-                    <div class="eye-socket">
-                        <div class="eye-glow"></div>
-                        <div class="iris">
-                            <div class="pupil"></div>
-                            <div class="reflection"></div>
-                        </div>
-                    </div>
-                    <div class="eyelid-bottom"></div>
-                </div>
-
-                <!-- Right Eye -->
-                <div class="eye-container right">
-                    <div class="eyelid-top"></div>
-                    <div class="eye-socket">
-                        <div class="eye-glow"></div>
-                        <div class="iris">
-                            <div class="pupil"></div>
-                            <div class="reflection"></div>
-                        </div>
-                    </div>
-                    <div class="eyelid-bottom"></div>
-                </div>
+            <div class="eyes-image-container" id="eyesContainer">
+                <img src="eyes.png" alt="realistic eyes" class="eyes-img">
+                
+                <!-- Animated Eyelids (overlaying the image) -->
+                <div class="eyelid top-lid" id="topLid"></div>
+                <div class="eyelid bottom-lid" id="bottomLid"></div>
+                
+                <!-- Shadows to blend the image edges -->
+                <div class="vignette"></div>
             </div>
             
             <div class="text-area">
-                <p class="emotional-text">u didn't appreciate what i did for u</p>
+                <p class="emotional-text flicker">u didn't appreciate what i did for u</p>
             </div>
         </div>
     </main>

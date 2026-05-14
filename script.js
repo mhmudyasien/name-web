@@ -1,132 +1,110 @@
 /**
- * Mahmoudverse - Cinematic Script
- * Handles: Mouse tracking, Blinking, Random Eye Movement, 
- * Ambient Particles, and Shooting Stars.
+ * Mahmoudverse - Realistic Sci-Fi Script
+ * Handles: Realistic Parallax, Natural Blinking,
+ * Ambient Space Effects, and Immersive UI.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const eyes = document.querySelectorAll('.eye-container');
-    const irises = document.querySelectorAll('.iris');
-    const shootingStarsContainer = document.getElementById('shootingStarsContainer');
+    const eyesContainer = document.getElementById('eyesContainer');
     const particlesContainer = document.getElementById('particlesContainer');
+    const shootingStarsContainer = document.getElementById('shootingStarsContainer');
 
-    // --- State ---
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let targetX = 0;
-    let targetY = 0;
+    // --- Mouse Tracking & Parallax ---
+    let mouseX = 0;
+    let mouseY = 0;
     let currentX = 0;
     let currentY = 0;
 
-    // --- Mouse Tracking ---
     document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        // Normalize mouse positions to -1 to 1
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
     });
 
-    // --- Eye Logic ---
-    function updateEyes() {
-        // Calculate the distance and angle for eye tracking
-        eyes.forEach((eye, index) => {
-            const iris = irises[index];
-            const rect = eye.getBoundingClientRect();
-            const eyeCenterX = rect.left + rect.width / 2;
-            const eyeCenterY = rect.top + rect.height / 2;
+    function updateParallax() {
+        // Smoothly interpolate towards mouse position
+        // This gives that "slowly following" emotional feel
+        currentX += (mouseX - currentX) * 0.03;
+        currentY += (mouseY - currentY) * 0.03;
 
-            const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
-            const dist = Math.min(Math.hypot(mouseX - eyeCenterX, mouseY - eyeCenterY) / 15, 12);
-
-            // Calculate target offset
-            const tx = Math.cos(angle) * dist;
-            const ty = Math.sin(angle) * dist;
-
-            // Smooth interpolation for "emotional tiredness"
-            currentX += (tx - currentX) * 0.05;
-            currentY += (ty - currentY) * 0.05;
-
-            iris.style.transform = `translate(${currentX}px, ${currentY}px)`;
-            
-            // Subtle container rotation
-            eye.style.transform = `rotateX(${-currentY * 0.5}deg) rotateY(${currentX * 0.5}deg)`;
-        });
-
-        requestAnimationFrame(updateEyes);
-    }
-
-    // --- Random Blinking ---
-    function blink() {
-        eyes.forEach(eye => eye.classList.add('blink'));
-        
-        // Duration of a blink
-        setTimeout(() => {
-            eyes.forEach(eye => eye.classList.remove('blink'));
-        }, 150);
-
-        // Schedule next blink randomly (between 3 to 8 seconds)
-        const nextBlink = 3000 + Math.random() * 5000;
-        setTimeout(blink, nextBlink);
-    }
-
-    // --- Random Pupil Look (Occasional wandering) ---
-    function wander() {
-        // Only wander if mouse hasn't moved much recently
-        // For simplicity, we just add a random bias every few seconds
-        const biasX = (Math.random() - 0.5) * 10;
-        const biasY = Math.random() * 5; // Look slightly down more often (tired)
-        
-        targetX = biasX;
-        targetY = biasY;
-
-        setTimeout(wander, 2000 + Math.random() * 4000);
-    }
-
-    // --- Ambient Particles ---
-    function initParticles() {
-        const count = 40;
-        for (let i = 0; i < count; i++) {
-            createParticle();
+        // Apply transform to the container
+        // Subtle tilt and shift
+        if (eyesContainer) {
+            eyesContainer.style.transform = `
+                translate(${currentX * 15}px, ${currentY * 10}px)
+                rotateY(${currentX * 5}deg)
+                rotateX(${-currentY * 5}deg)
+            `;
         }
+
+        requestAnimationFrame(updateParallax);
     }
 
-    function createParticle() {
-        const p = document.createElement('div');
-        p.className = 'particle';
+    // --- Natural Blinking Logic ---
+    function triggerBlink() {
+        if (!eyesContainer) return;
         
-        const size = Math.random() * 2 + 1;
-        const x = Math.random() * 100;
-        const y = Math.random() * 100;
-        const duration = 10 + Math.random() * 20;
-        const delay = -Math.random() * 20;
-
-        p.style.width = `${size}px`;
-        p.style.height = `${size}px`;
-        p.style.left = `${x}vw`;
-        p.style.top = `${y}vh`;
-        p.style.opacity = Math.random() * 0.3;
+        eyesContainer.classList.add('blink');
         
-        // Floating animation
-        p.animate([
-            { transform: `translate(0, 0)`, opacity: 0 },
-            { transform: `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px)`, opacity: 0.3 },
-            { transform: `translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px)`, opacity: 0 }
-        ], {
-            duration: duration * 1000,
-            delay: delay * 1000,
-            iterations: Infinity,
-            easing: 'ease-in-out'
-        });
+        // Random blink duration (mimicking real eye behavior)
+        const blinkDuration = 100 + Math.random() * 150;
+        
+        setTimeout(() => {
+            eyesContainer.classList.remove('blink');
+        }, blinkDuration);
 
-        particlesContainer.appendChild(p);
+        // Schedule next blink randomly (between 3 to 10 seconds)
+        const nextBlink = 3000 + Math.random() * 7000;
+        setTimeout(triggerBlink, nextBlink);
+    }
+
+    // --- Space Particles ---
+    function initParticles() {
+        if (!particlesContainer) return;
+        const count = 50;
+        
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            
+            const size = Math.random() * 3;
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const duration = 20 + Math.random() * 40;
+            const delay = -Math.random() * 40;
+
+            p.style.width = `${size}px`;
+            p.style.height = `${size}px`;
+            p.style.left = `${x}vw`;
+            p.style.top = `${y}vh`;
+            p.style.opacity = Math.random() * 0.4;
+            
+            // Subtle floating movement
+            p.animate([
+                { transform: 'translate(0, 0)', opacity: 0 },
+                { transform: `translate(${(Math.random() - 0.5) * 50}px, ${(Math.random() - 0.5) * 50}px)`, opacity: 0.4, offset: 0.5 },
+                { transform: `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px)`, opacity: 0 }
+            ], {
+                duration: duration * 1000,
+                delay: delay * 1000,
+                iterations: Infinity,
+                easing: 'ease-in-out'
+            });
+
+            particlesContainer.appendChild(p);
+        }
     }
 
     // --- Shooting Stars ---
     function spawnShootingStar() {
+        if (!shootingStarsContainer) return;
+        
         const star = document.createElement('div');
         star.className = 'shooting-star';
         
         const startX = Math.random() * window.innerWidth;
-        const startY = Math.random() * window.innerHeight * 0.5;
-        const angle = 45; // Fixed diagonal path
+        const startY = Math.random() * window.innerHeight * 0.4;
+        const angle = 30 + Math.random() * 30;
         
         star.style.left = `${startX}px`;
         star.style.top = `${startY}px`;
@@ -134,24 +112,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         shootingStarsContainer.appendChild(star);
 
-        const duration = 1000 + Math.random() * 1000;
+        const duration = 800 + Math.random() * 1200;
         
         star.animate([
             { transform: `rotate(${angle}deg) translateX(0)`, opacity: 0 },
             { transform: `rotate(${angle}deg) translateX(0)`, opacity: 1, offset: 0.1 },
-            { transform: `rotate(${angle}deg) translateX(-400px)`, opacity: 0 }
+            { transform: `rotate(${angle}deg) translateX(-500px)`, opacity: 0 }
         ], {
             duration: duration,
             easing: 'linear'
         }).onfinish = () => star.remove();
 
-        setTimeout(spawnShootingStar, 5000 + Math.random() * 10000);
+        // Random interval for shooting stars
+        setTimeout(spawnShootingStar, 4000 + Math.random() * 12000);
     }
 
     // --- Init ---
-    updateEyes();
-    blink();
-    wander();
+    updateParallax();
+    setTimeout(triggerBlink, 2000); // Initial blink delay
     initParticles();
     spawnShootingStar();
 });
