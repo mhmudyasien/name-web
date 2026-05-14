@@ -1,10 +1,10 @@
 /**
  * Mahmoudverse v2.5.0
- * Atmospheric Terminal Logic
+ * Cosmic Singularity Logic
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const eyesContainer = document.getElementById('eyesContainer');
+    const starContainer = document.getElementById('starContainer');
     const shootingStarsContainer = document.getElementById('shootingStarsContainer');
 
     // --- Subtle Mouse Parallax ---
@@ -22,21 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentX += (mouseX - currentX) * 0.02;
         currentY += (mouseY - currentY) * 0.02;
 
-        if (eyesContainer) {
-            // Very subtle movement to maintain the "movie poster" look
-            eyesContainer.style.transform = `translate(${currentX * 10}px, ${currentY * 5}px)`;
+        if (starContainer) {
+            // Star "floats" subtly in response to mouse
+            starContainer.style.transform = `translate(${currentX * 20}px, ${currentY * 15}px)`;
         }
         requestAnimationFrame(updateParallax);
-    }
-
-    // --- Natural Blinking ---
-    function triggerBlink() {
-        if (!eyesContainer) return;
-        eyesContainer.classList.add('blink');
-        setTimeout(() => {
-            eyesContainer.classList.remove('blink');
-        }, 120);
-        setTimeout(triggerBlink, 3000 + Math.random() * 6000);
     }
 
     // --- Cinematic Shooting Stars ---
@@ -46,10 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const star = document.createElement('div');
         star.className = 'shooting-star';
         
-        // Random starting positions (mostly from top right to match photo style)
         const startX = Math.random() * window.innerWidth;
         const startY = Math.random() * (window.innerHeight * 0.7);
-        const angle = 45; // Diagonal
+        const angle = 45;
         
         star.style.left = `${startX}px`;
         star.style.top = `${startY}px`;
@@ -57,26 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         shootingStarsContainer.appendChild(star);
 
-        const duration = 1500 + Math.random() * 1000;
+        const duration = 1200 + Math.random() * 1000;
         
         star.animate([
             { transform: `rotate(${angle}deg) translateX(0)`, opacity: 0 },
             { transform: `rotate(${angle}deg) translateX(0)`, opacity: 1, offset: 0.1 },
-            { transform: `rotate(${angle}deg) translateX(-600px)`, opacity: 0 }
+            { transform: `rotate(${angle}deg) translateX(-800px)`, opacity: 0 }
         ], {
             duration: duration,
             easing: 'linear'
         }).onfinish = () => star.remove();
 
-        setTimeout(spawnShootingStar, 3000 + Math.random() * 8000);
+        setTimeout(spawnShootingStar, 4000 + Math.random() * 8000);
     }
 
     // --- Init ---
     updateParallax();
-    setTimeout(triggerBlink, 2000);
     spawnShootingStar();
     
-    // Add multiple stars initially for that "starfield" density
+    // Multiple stars on start
     for(let i=0; i<3; i++) {
         setTimeout(spawnShootingStar, i * 2000);
     }
