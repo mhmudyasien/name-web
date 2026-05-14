@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mahmoudverse</title>
+    <title>MAHMOUDVERSE v2.5.0</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +13,24 @@
     <!-- Grain Overlay -->
     <div class="grain-overlay"></div>
 
+    <!-- UI Frame: Top Bar -->
+    <header class="terminal-header">
+        <div class="header-left">MAHMOUDVERSE <span class="version">v2.5.0</span></div>
+        <div class="header-right">
+            <span class="visitor">[ VISITOR ] UNKNOWN</span>
+            <span class="ip">IP 0.0.0.0</span>
+            <span class="status-dot"></span>
+        </div>
+    </header>
+
+    <!-- UI Frame: Brackets/Corners -->
+    <div class="ui-brackets"></div>
+
     <!-- Background Elements -->
     <div class="space-background">
         <div class="stars layer1"></div>
         <div class="stars layer2"></div>
-        <div class="stars layer3"></div>
-        <div class="nebula-glow"></div>
+        <div class="nebula-purple"></div>
         
         <div id="shootingStarsContainer"></div>
         <div id="particlesContainer"></div>
@@ -30,19 +42,25 @@
             <div class="eyes-image-container" id="eyesContainer">
                 <img src="eyes.png" alt="realistic eyes" class="eyes-img">
                 
-                <!-- Animated Eyelids (overlaying the image) -->
+                <!-- Animated Eyelids -->
                 <div class="eyelid top-lid" id="topLid"></div>
                 <div class="eyelid bottom-lid" id="bottomLid"></div>
                 
-                <!-- Shadows to blend the image edges -->
                 <div class="vignette"></div>
             </div>
             
             <div class="text-area">
-                <p class="emotional-text flicker">u didn't appreciate what i did for u</p>
+                <p class="emotional-text">"u didn't appreciate what i did for u"</p>
+                <div class="text-indicator">_</div>
             </div>
         </div>
     </main>
+
+    <!-- UI Frame: Bottom Bar -->
+    <footer class="terminal-footer">
+        <div class="footer-left">> SYSTEM_STATUS: OBSERVING...</div>
+        <div class="footer-right">> CONNECTION: STABLE</div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
