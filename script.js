@@ -16,9 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const visitCount = parseInt(localStorage.getItem('visitCount') || '0');
     const messageSent = localStorage.getItem('messageSent') === 'true';
 
-    if (visitCount > 0 && !messageSent) {
+    // Hide button only on 2nd and 3rd visit (after 1st and 2nd refresh)
+    if (visitCount > 0 && visitCount < 3 && !messageSent) {
         toggleBtn.style.display = 'none';
         upsetMsg.style.display = 'block';
+    } else {
+        toggleBtn.style.display = 'block';
+        upsetMsg.style.display = 'none';
     }
 
     // Increment visit count for next time
