@@ -1,47 +1,27 @@
-/* Reset and Base Styles */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-dark: #05070a;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --accent-primary: #6366f1;
+    --accent-secondary: #a855f7;
+    --accent-glow: rgba(99, 102, 241, 0.5);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-:root {
-    --bg-black: #050505;
-    --blood-red: #ff0000;
-    --ui-white: #ffffff;
-    --dim-red: rgba(255, 0, 0, 0.3);
-    --modal-bg: rgba(5, 5, 5, 0.9);
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body {
-    font-family: 'Space Mono', monospace;
-    background-color: var(--bg-black);
-    color: var(--ui-white);
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Grain Overlay */
-.grain-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 100;
-    pointer-events: none;
-    background: url('https://grainy-gradients.vercel.app/noise.svg');
-    opacity: 0.06;
-    mix-blend-mode: overlay;
-}
-
-/* Vignette and Smoothing */
-.vignette {
-    position: absolute;
-    top: 0;
     left: 0;
     width: 100%;
     height: 100%;

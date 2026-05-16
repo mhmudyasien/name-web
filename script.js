@@ -4,6 +4,82 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const assetList = document.getElementById('asset-list');
+    
+    const assets = [
+        { name: 'Bitcoin', symbol: 'BTC', price: 64230.50, change: 2.4, mcap: '1.2T', icon: 'https://cryptologos.cc/logos/bitcoin-btc-logo.svg' },
+        { name: 'Ethereum', symbol: 'ETH', price: 3450.20, change: -1.2, mcap: '410B', icon: 'https://cryptologos.cc/logos/ethereum-eth-logo.svg' },
+        { name: 'Solana', symbol: 'SOL', price: 145.15, change: 8.5, mcap: '64B', icon: 'https://cryptologos.cc/logos/solana-sol-logo.svg' },
+        { name: 'Cardano', symbol: 'ADA', price: 0.45, change: 0.5, mcap: '16B', icon: 'https://cryptologos.cc/logos/cardano-ada-logo.svg' },
+        { name: 'Polkadot', symbol: 'DOT', price: 7.20, change: -3.4, mcap: '10B', icon: 'https://cryptologos.cc/logos/polkadot-new-dot-logo.svg' }
+    ];
+
+    function renderAssets() {
+        assetList.innerHTML = assets.map(asset => `
+            <tr>
+                <td>
+                    <div class="coin-info">
+                        <img src="${asset.icon}" width="24" height="24">
+                        <div>
+                            <div style="font-weight: 600;">${asset.name}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">${asset.symbol}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>$${asset.price.toLocaleString()}</td>
+                <td class="${asset.change >= 0 ? 'positive' : 'negative'}">
+                    ${asset.change >= 0 ? '+' : ''}${asset.change}%
+                </td>
+                <td>$${asset.mcap}</td>
+                <td>
+                    <button style="background: var(--accent-primary); border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Trade</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Initial render
+    renderAssets();
+
+    // Simulate real-time updates
+    setInterval(() => {
+        assets.forEach(asset => {
+            const fluctuation = (Math.random() - 0.5) * (asset.price * 0.001);
+            asset.price += fluctuation;
+        });
+        renderAssets();
+    }, 3000);
+
+    // Count-up animation for balance
+    const balanceEl = document.querySelector('.stat-value');
+    let currentBalance = 120000;
+    const targetBalance = 124592.40;
+    const duration = 2000;
+    const increment = (targetBalance - currentBalance) / (duration / 16);
+
+    const animateBalance = () => {
+        if (currentBalance < targetBalance) {
+            currentBalance += increment;
+            balanceEl.textContent = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            requestAnimationFrame(animateBalance);
+        } else {
+            balanceEl.textContent = `$${targetBalance.toLocaleString()}`;
+        }
+    };
+
+    animateBalance();
+
+    // Add subtle hover effect to cards
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
     const toggleBtn = document.getElementById('toggleMessageBtn');
     const modal = document.getElementById('messageModal');
     const closeBtn = document.getElementById('closeBtn');
